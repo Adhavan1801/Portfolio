@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { db, storage } from '@/lib/firebase';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { uploadToCloudinary } from '@/lib/cloudinary';
 
 export default function AboutPage() {
   const [profile, setProfile] = useState(null);
@@ -41,22 +41,13 @@ export default function AboutPage() {
     if (!file) return;
 
     setUploading(true);
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${field}-${Math.random()}.${fileExt}`;
-    const storageRef = ref(storage, `portfolio-assets/${fileName}`);
-
     try {
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on('state_changed', null, (error) => {
-        throw error;
-      }, async () => {
-        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-        setForm((prev) => ({ ...prev, [field]: downloadURL }));
-        showToast('File uploaded successfully!');
-        setUploading(false);
-      });
+      const downloadURL = await uploadToCloudinary(file);
+      setForm((prev) => ({ ...prev, [field]: downloadURL }));
+      showToast('File uploaded successfully!');
     } catch (error) {
       showToast('Error uploading file: ' + error.message, 'error');
+    } finally {
       setUploading(false);
     }
   }
@@ -134,29 +125,44 @@ export default function AboutPage() {
               <label className="form-label">Email</label>
               <input className="form-input" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
             </div>
-            <div className="form-group">
-              <label className="form-label">Profile Image URL</label>
-              <input className="form-input" value={form.profile_image_url} onChange={(e) => setForm({ ...form, profile_image_url: e.target.value })} />
-              <span className="form-hint">Used in the Hero section</span>
-            </div>
           </div>
+          
           <div className="form-row">
             <div className="form-group">
+              <label className="form-label">Profile Image URL</label>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <input className="form-input" value={form.profile_image_url} onChange={(e) => setForm({ ...form, profile_image_url: e.target.value })} />
+                <label className="btn btn-secondary" style={{ whiteSpace: 'nowrap', cursor: 'pointer' }}>
+                  {uploading ? 'Uploading...' : 'Upload Image'}
+                  <input type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => handleFileUpload(e, 'profile_image_url')} disabled={uploading} />
+                </label>
+              </div>
+              <span className="form-hint">Used in the Hero section</span>
+            </div>
+            <div className="form-group">
               <label className="form-label">About Image URL</label>
-              <input className="form-input" value={form.about_image_url} onChange={(e) => setForm({ ...form, about_image_url: e.target.value })} />
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <input className="form-input" value={form.about_image_url} onChange={(e) => setForm({ ...form, about_image_url: e.target.value })} />
+                <label className="btn btn-secondary" style={{ whiteSpace: 'nowrap', cursor: 'pointer' }}>
+                  {uploading ? 'Uploading...' : 'Upload Image'}
+                  <input type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => handleFileUpload(e, 'about_image_url')} disabled={uploading} />
+                </label>
+              </div>
               <span className="form-hint">Used in the About Me section</span>
             </div>
+          </div>
+
+          <div className="form-row">
             <div className="form-group">
               <label className="form-label">GitHub URL</label>
               <input className="form-input" value={form.github_url} onChange={(e) => setForm({ ...form, github_url: e.target.value })} />
             </div>
-          </div>
-          <div className="form-row">
             <div className="form-group">
               <label className="form-label">LinkedIn URL</label>
               <input className="form-input" value={form.linkedin_url} onChange={(e) => setForm({ ...form, linkedin_url: e.target.value })} />
             </div>
           </div>
+          
           <div className="form-group" style={{ position: 'relative' }}>
             <label className="form-label">Resume / CV</label>
             <div style={{ display: 'flex', gap: '10px' }}>

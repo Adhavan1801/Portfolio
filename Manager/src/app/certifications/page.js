@@ -3,11 +3,13 @@
 import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
+import { uploadToCloudinary } from '@/lib/cloudinary';
 
 export default function CertificationsPage() {
   const [certs, setCerts] = useState([]);
   const [editing, setEditing] = useState(null);
   const [toast, setToast] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
   const initialForm = { title: '', issuer: '', date: '', credential_url: '', is_visible: true, display_order: 0 };
   const [form, setForm] = useState(initialForm);
@@ -25,6 +27,22 @@ export default function CertificationsPage() {
   function showToast(msg, type = 'success') {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 3000);
+  }
+
+  async function handleFileUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const downloadURL = await uploadToCloudinary(file);
+      setForm(prev => ({ ...prev, credential_url: downloadURL }));
+      showToast('Certificate uploaded successfully!');
+    } catch (error) {
+      showToast('Error uploading file: ' + error.message, 'error');
+    } finally {
+      setUploading(false);
+    }
   }
 
   function handleEdit(cert) {
@@ -91,9 +109,15 @@ export default function CertificationsPage() {
               <label className="form-label">Date</label>
               <input className="form-input" value={form.date} onChange={e => setForm({...form, date: e.target.value})} placeholder="e.g. Aug 2025" />
             </div>
-            <div className="form-group">
-              <label className="form-label">Credential URL</label>
-              <input className="form-input" value={form.credential_url} onChange={e => setForm({...form, credential_url: e.target.value})} />
+            <div className="form-group" style={{ position: 'relative' }}>
+              <label className="form-label">Credential URL or File</label>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <input className="form-input" value={form.credential_url} onChange={e => setForm({...form, credential_url: e.target.value})} placeholder="URL or upload a file..." />
+                <label className="btn btn-secondary" style={{ whiteSpace: 'nowrap', cursor: 'pointer' }}>
+                  {uploading ? 'Uploading...' : 'Upload File'}
+                  <input type="file" accept="image/*,.pdf" style={{ display: 'none' }} onChange={handleFileUpload} disabled={uploading} />
+                </label>
+              </div>
             </div>
           </div>
           <div className="form-row" style={{ marginTop: '20px', alignItems: 'center' }}>

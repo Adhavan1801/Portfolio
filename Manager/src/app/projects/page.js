@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { db, storage } from '@/lib/firebase';
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { uploadToCloudinary } from '@/lib/cloudinary';
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState([]);
@@ -56,20 +56,13 @@ export default function ProjectsPage() {
     if (!file) return;
 
     setUploading(true);
-    const fileExt = file.name.split('.').pop();
-    const fileName = `project-${Math.random()}.${fileExt}`;
-    const storageRef = ref(storage, `portfolio-assets/${fileName}`);
-
     try {
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on('state_changed', null, (error) => { throw error; }, async () => {
-        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-        setForm(prev => ({ ...prev, image_url: downloadURL }));
-        showToast('Image uploaded!');
-        setUploading(false);
-      });
+      const downloadURL = await uploadToCloudinary(file);
+      setForm(prev => ({ ...prev, image_url: downloadURL }));
+      showToast('Image uploaded successfully!');
     } catch (error) {
       showToast('Error uploading: ' + error.message, 'error');
+    } finally {
       setUploading(false);
     }
   }
