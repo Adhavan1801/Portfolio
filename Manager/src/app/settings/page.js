@@ -2,40 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, addDoc, deleteDoc, doc, query, orderBy, getDoc, setDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
 
 export default function SettingsPage() {
   const [filters, setFilters] = useState([]);
   const [toast, setToast] = useState(null);
   const [filterForm, setFilterForm] = useState({ name: '', slug: '', display_order: 0 });
-  const [maintenanceMode, setMaintenanceMode] = useState(false);
 
   useEffect(() => { 
     fetchFilters(); 
-    fetchSettings();
   }, []);
-
-  async function fetchSettings() {
-    try {
-      const docRef = doc(db, 'settings', 'global');
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setMaintenanceMode(docSnap.data().maintenance_mode || false);
-      }
-    } catch (e) { console.error(e); }
-  }
-
-  async function toggleMaintenanceMode() {
-    const newValue = !maintenanceMode;
-    setMaintenanceMode(newValue); // optimistic update
-    try {
-      await setDoc(doc(db, 'settings', 'global'), { maintenance_mode: newValue }, { merge: true });
-      showToast(`Maintenance mode ${newValue ? 'enabled' : 'disabled'}!`);
-    } catch (error) {
-      setMaintenanceMode(!newValue); // revert on error
-      showToast('Error updating maintenance mode', 'error');
-    }
-  }
 
   async function fetchFilters() {
     try {
@@ -77,22 +53,6 @@ export default function SettingsPage() {
   return (
     <>
       <div className="page-header"><h1>Settings</h1><p>Manage project filter categories and Firebase settings</p></div>
-
-      <div className="card" style={{ marginBottom: '24px' }}>
-        <h2 className="card-title" style={{ marginBottom: '16px' }}>Site Maintenance Mode</h2>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', backgroundColor: 'var(--surface)', borderRadius: '8px', border: '1px solid var(--border)' }}>
-          <div>
-            <h3 style={{ margin: 0, fontSize: '1rem', color: maintenanceMode ? '#ff4d4f' : 'var(--text-primary)' }}>{maintenanceMode ? 'Maintenance Mode is Active' : 'Site is Live'}</h3>
-            <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>When active, all visitors will see a maintenance screen instead of your portfolio.</p>
-          </div>
-          <label style={{ position: 'relative', display: 'inline-block', width: '50px', height: '28px' }}>
-            <input type="checkbox" checked={maintenanceMode} onChange={toggleMaintenanceMode} style={{ opacity: 0, width: 0, height: 0 }} />
-            <span style={{ position: 'absolute', cursor: 'pointer', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: maintenanceMode ? '#ff4d4f' : '#ccc', transition: '.4s', borderRadius: '34px' }}>
-              <span style={{ position: 'absolute', content: '""', height: '20px', width: '20px', left: maintenanceMode ? '26px' : '4px', bottom: '4px', backgroundColor: 'white', transition: '.4s', borderRadius: '50%' }}></span>
-            </span>
-          </label>
-        </div>
-      </div>
 
       <div className="card" style={{ marginBottom: '24px' }}>
         <h2 className="card-title" style={{ marginBottom: '20px' }}>Project Filter Categories</h2>
