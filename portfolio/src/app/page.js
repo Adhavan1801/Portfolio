@@ -126,6 +126,8 @@ const fallbackCertifications = [
   { id: '5', title: 'OpenCV Computer Vision Basics', issuer: 'Udemy', date: '2024-08-01', display_order: 5 }
 ];
 
+export const revalidate = 60; // Revalidate every 60 seconds
+
 export default async function HomePage() {
   // Try fetching from Supabase; fall back to static data
   let profile = fallbackProfile;
