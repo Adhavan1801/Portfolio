@@ -101,3 +101,17 @@ export async function getFilterCategories() {
     return [];
   }
 }
+
+export async function getSettings() {
+  try {
+    const docRef = doc(db, 'settings', 'global');
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() };
+    }
+    return null;
+  } catch (error) {
+    console.error('Error fetching settings:', error);
+    return null;
+  }
+}

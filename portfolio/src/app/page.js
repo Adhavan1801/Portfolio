@@ -5,6 +5,7 @@ import Projects from '@/components/Projects';
 import Experience from '@/components/Experience';
 import Certifications from '@/components/Certifications';
 import Contact from '@/components/Contact';
+import Maintenance from '@/components/Maintenance';
 
 
 // Static fallback data — used when Supabase is not connected
@@ -147,9 +148,10 @@ export default async function HomePage() {
         getExperience,
         getCertifications,
         getFilterCategories,
+        getSettings,
       } = await import('@/lib/firebase');
 
-      const [dbProfile, dbProjects, dbSkills, dbExperience, dbCerts, dbFilters] =
+      const [dbProfile, dbProjects, dbSkills, dbExperience, dbCerts, dbFilters, dbSettings] =
         await Promise.all([
           getProfile(),
           getProjects(),
@@ -157,7 +159,12 @@ export default async function HomePage() {
           getExperience(),
           getCertifications(),
           getFilterCategories(),
+          getSettings(),
         ]);
+
+      if (dbSettings?.maintenance_mode) {
+        return <Maintenance profile={dbProfile || profile} />;
+      }
 
       if (dbProfile) profile = dbProfile;
       if (dbProjects?.length) projects = dbProjects;
