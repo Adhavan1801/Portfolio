@@ -1,5 +1,6 @@
 import './globals.css';
-import Sidebar from '@/components/Sidebar';
+import { AuthProvider } from '@/context/AuthContext';
+import ProtectedLayout from '@/components/ProtectedLayout';
 
 export const metadata = {
   title: 'Portfolio Manager — Durai Singam',
@@ -10,10 +11,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <div className="admin-layout">
-          <Sidebar />
-          <main className="admin-content">{children}</main>
-        </div>
+        <AuthProvider>
+          <ProtectedLayout>
+            {children}
+          </ProtectedLayout>
+        </AuthProvider>
       </body>
     </html>
   );
