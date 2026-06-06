@@ -2,6 +2,9 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { db } from '@/lib/firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 const navItems = [
   {
@@ -60,6 +63,32 @@ import { useAuth } from '@/context/AuthContext';
 export default function Sidebar() {
   const pathname = usePathname();
   const { logout } = useAuth();
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
+  async function fetchSettings() {
+    try {
+      const docRef = doc(db, 'settings', 'global');
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setMaintenanceMode(docSnap.data().maintenance_mode || false);
+      }
+    } catch (e) { console.error(e); }
+  }
+
+  async function toggleMaintenanceMode() {
+    const newValue = !maintenanceMode;
+    setMaintenanceMode(newValue);
+    try {
+      await setDoc(doc(db, 'settings', 'global'), { maintenance_mode: newValue }, { merge: true });
+    } catch (error) {
+      setMaintenanceMode(!newValue);
+      console.error('Error updating maintenance mode', error);
+    }
+  }
 
   return (
     <aside className="sidebar">
@@ -82,6 +111,21 @@ export default function Sidebar() {
       </nav>
 
       <div className="sidebar-footer" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', marginBottom: '4px', backgroundColor: 'var(--surface-active)', borderRadius: '6px', border: '1px solid var(--border)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: maintenanceMode ? '#ff4d4f' : '#52c41a' }} />
+            <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+              {maintenanceMode ? 'Maintenance' : 'Live'}
+            </span>
+          </div>
+          <label style={{ position: 'relative', display: 'inline-block', width: '36px', height: '20px', margin: 0 }}>
+            <input type="checkbox" checked={maintenanceMode} onChange={toggleMaintenanceMode} style={{ opacity: 0, width: 0, height: 0 }} />
+            <span style={{ position: 'absolute', cursor: 'pointer', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: maintenanceMode ? '#ff4d4f' : '#ccc', transition: '.4s', borderRadius: '34px' }}>
+              <span style={{ position: 'absolute', content: '""', height: '14px', width: '14px', left: maintenanceMode ? '18px' : '4px', bottom: '3px', backgroundColor: 'white', transition: '.4s', borderRadius: '50%' }}></span>
+            </span>
+          </label>
+        </div>
+
         <a href="http://localhost:3000" target="_blank" rel="noopener noreferrer">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           View Portfolio
