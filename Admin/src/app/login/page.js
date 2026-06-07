@@ -39,8 +39,8 @@ export default function LoginPage() {
     }}>
       <div className="card" style={{ maxWidth: '400px', width: '100%' }}>
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-          <h1 style={{ fontSize: '1.5rem', marginBottom: '8px' }}>Manager Login</h1>
-          <p style={{ color: 'var(--text-muted)' }}>Sign in to manage your portfolio</p>
+          <h1 style={{ fontSize: '1.5rem', marginBottom: '8px' }}>Admin Login</h1>
+          <p style={{ color: 'var(--text-muted)' }}>Sign in to manage your Portfolio</p>
         </div>
 
         {error && (

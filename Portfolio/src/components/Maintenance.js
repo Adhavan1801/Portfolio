@@ -76,7 +76,7 @@ export default function Maintenance({ profile }) {
             marginBottom: '32px',
           }}
         >
-          {profile?.name || 'Durai Singam'}'s portfolio is currently undergoing some scheduled maintenance. Please check back shortly!
+          {profile?.name || 'Durai Singam'}'s Portfolio is currently undergoing some scheduled maintenance. Please check back shortly!
         </p>
 
         <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>

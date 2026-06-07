@@ -94,7 +94,7 @@ export default function Sidebar() {
     <aside className="sidebar">
       <div className="sidebar-logo">
         <span className="dot"></span>
-        Manager
+        Admin
       </div>
 
       <nav className="sidebar-nav">

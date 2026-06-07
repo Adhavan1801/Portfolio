@@ -121,7 +121,7 @@ export default function ProjectsPage() {
     <>
       <div className="page-header">
         <h1>Projects</h1>
-        <p>Manage your portfolio projects</p>
+        <p>Manage your Portfolio projects</p>
       </div>
 
       <div className="card" style={{ marginBottom: '30px' }}>

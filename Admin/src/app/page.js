@@ -39,7 +39,7 @@ export default function DashboardPage() {
     <>
       <div className="page-header">
         <h1>Dashboard</h1>
-        <p>Overview of your portfolio content</p>
+        <p>Overview of your Portfolio content</p>
       </div>
 
       <div className="stats-grid">
@@ -81,7 +81,7 @@ export default function DashboardPage() {
         <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: '1.8' }}>
           <p><strong>1.</strong> Create a Firebase project at <a href="https://firebase.google.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>firebase.google.com</a></p>
           <p><strong>2.</strong> Enable Firestore Database and Firebase Storage in your console</p>
-          <p><strong>3.</strong> Copy your Firebase config keys to <code>.env.local</code> in both <code>portfolio/</code> and <code>Manager/</code></p>
+          <p><strong>3.</strong> Copy your Firebase config keys to <code>.env.local</code> in both <code>Portfolio/</code> and <code>Admin/</code></p>
           <p><strong>4.</strong> Run the seed script to populate default data.</p>
         </div>
       </div>

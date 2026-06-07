@@ -3,8 +3,8 @@ import { AuthProvider } from '@/context/AuthContext';
 import ProtectedLayout from '@/components/ProtectedLayout';
 
 export const metadata = {
-  title: 'Portfolio Manager — Durai Singam',
-  description: 'Admin controller for managing portfolio content',
+  title: 'Portfolio Admin — Durai Singam',
+  description: 'Admin controller for managing Portfolio content',
 };
 
 export default function RootLayout({ children }) {
