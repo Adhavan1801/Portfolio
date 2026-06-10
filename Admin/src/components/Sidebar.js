@@ -15,17 +15,17 @@ const navItems = [
     ),
   },
   {
-    href: '/projects',
-    label: 'Projects',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-    ),
-  },
-  {
     href: '/about',
     label: 'About / Profile',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    ),
+  },
+  {
+    href: '/projects',
+    label: 'Projects',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
     ),
   },
   {
@@ -102,8 +102,14 @@ export default function Sidebar() {
       <div style={{ padding: '0 12px 16px', borderBottom: '1px solid var(--border)', marginBottom: '16px' }}>
         <select 
           value={activeProfile} 
-          onChange={(e) => {
-            changeProfile(e.target.value);
+          onChange={async (e) => {
+            const newProfile = e.target.value;
+            changeProfile(newProfile);
+            try {
+              await setDoc(doc(db, 'settings', 'global'), { published_profile_id: newProfile }, { merge: true });
+            } catch (err) {
+              console.error('Failed to set live profile:', err);
+            }
             window.location.reload(); // Reload to refetch data for the new profile
           }}
           className="form-select"

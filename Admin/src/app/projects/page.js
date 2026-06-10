@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { db, storage } from '@/lib/firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query } from 'firebase/firestore';
 import { uploadToCloudinary } from '@/lib/cloudinary';
 import { useProfile } from '@/context/ProfileContext';
 
@@ -30,9 +30,10 @@ export default function ProjectsPage() {
 
   async function fetchProjects() {
     try {
-      const q = query(collection(db, 'projects'), where('profile_id', '==', activeProfile));
+      const q = query(collection(db, 'projects'));
       const snapshot = await getDocs(q);
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+                     .filter(d => (d.profile_id || 'profile1') === activeProfile);
       data.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
       setProjects(data);
     } catch (e) {
@@ -42,9 +43,10 @@ export default function ProjectsPage() {
 
   async function fetchCategories() {
     try {
-      const q = query(collection(db, 'filter_categories'), where('profile_id', '==', activeProfile));
+      const q = query(collection(db, 'filter_categories'));
       const snapshot = await getDocs(q);
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+                     .filter(d => (d.profile_id || 'profile1') === activeProfile);
       data.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
       setCategories(data);
     } catch (e) {

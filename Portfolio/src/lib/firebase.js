@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, getDoc, doc, query, orderBy, where } from 'firebase/firestore';
+import { getFirestore, initializeFirestore, collection, getDocs, getDoc, doc, query, orderBy, where } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'dummy',
@@ -11,7 +11,13 @@ const firebaseConfig = {
 };
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-export const db = getFirestore(app);
+let firestoreDb;
+try {
+  firestoreDb = initializeFirestore(app, { experimentalForceLongPolling: true });
+} catch (e) {
+  firestoreDb = getFirestore(app);
+}
+export const db = firestoreDb;
 
 /* ── Helper fetchers ─────────────────────────────────────────────── */
 
@@ -33,11 +39,11 @@ export async function getProjects(profileId = 'profile1') {
   try {
     const q = query(
       collection(db, 'projects'),
-      where('is_visible', '==', true),
-      where('profile_id', '==', profileId)
+      where('is_visible', '==', true)
     );
     const querySnapshot = await getDocs(q);
-    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+                   .filter(d => (d.profile_id || 'profile1') === profileId);
     data.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
     return data;
   } catch (error) {
@@ -48,12 +54,10 @@ export async function getProjects(profileId = 'profile1') {
 
 export async function getSkills(profileId = 'profile1') {
   try {
-    const q = query(
-      collection(db, 'skills'),
-      where('profile_id', '==', profileId)
-    );
+    const q = query(collection(db, 'skills'));
     const querySnapshot = await getDocs(q);
-    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+                   .filter(d => (d.profile_id || 'profile1') === profileId);
     data.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
     return data;
   } catch (error) {
@@ -66,11 +70,11 @@ export async function getExperience(profileId = 'profile1') {
   try {
     const q = query(
       collection(db, 'experience'),
-      where('is_visible', '==', true),
-      where('profile_id', '==', profileId)
+      where('is_visible', '==', true)
     );
     const querySnapshot = await getDocs(q);
-    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+                   .filter(d => (d.profile_id || 'profile1') === profileId);
     data.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
     return data;
   } catch (error) {
@@ -83,11 +87,11 @@ export async function getCertifications(profileId = 'profile1') {
   try {
     const q = query(
       collection(db, 'certifications'),
-      where('is_visible', '==', true),
-      where('profile_id', '==', profileId)
+      where('is_visible', '==', true)
     );
     const querySnapshot = await getDocs(q);
-    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+                   .filter(d => (d.profile_id || 'profile1') === profileId);
     data.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
     return data;
   } catch (error) {
@@ -98,12 +102,10 @@ export async function getCertifications(profileId = 'profile1') {
 
 export async function getFilterCategories(profileId = 'profile1') {
   try {
-    const q = query(
-      collection(db, 'filter_categories'),
-      where('profile_id', '==', profileId)
-    );
+    const q = query(collection(db, 'filter_categories'));
     const querySnapshot = await getDocs(q);
-    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+                   .filter(d => (d.profile_id || 'profile1') === profileId);
     data.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
     return data;
   } catch (error) {

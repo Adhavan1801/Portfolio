@@ -2,46 +2,25 @@
 
 import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, addDoc, deleteDoc, doc, query, where, getDoc, setDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, deleteDoc, doc, query } from 'firebase/firestore';
 import { useProfile } from '@/context/ProfileContext';
 
 export default function SettingsPage() {
   const [filters, setFilters] = useState([]);
   const [toast, setToast] = useState(null);
   const [filterForm, setFilterForm] = useState({ name: '', slug: '', display_order: 0 });
-  const [liveProfile, setLiveProfile] = useState('profile1');
   const { activeProfile } = useProfile();
 
   useEffect(() => { 
     fetchFilters(); 
-    fetchGlobalSettings();
   }, [activeProfile]);
-
-  async function fetchGlobalSettings() {
-    try {
-      const docRef = doc(db, 'settings', 'global');
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setLiveProfile(docSnap.data().published_profile_id || 'profile1');
-      }
-    } catch (e) { console.error(e); }
-  }
-
-  async function updateLiveProfile(profileId) {
-    setLiveProfile(profileId);
-    try {
-      await setDoc(doc(db, 'settings', 'global'), { published_profile_id: profileId }, { merge: true });
-      showToast('Live profile updated!');
-    } catch (e) {
-      showToast('Failed to update live profile', 'error');
-    }
-  }
 
   async function fetchFilters() {
     try {
-      const q = query(collection(db, 'filter_categories'), where('profile_id', '==', activeProfile));
+      const q = query(collection(db, 'filter_categories'));
       const snapshot = await getDocs(q);
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+                     .filter(d => (d.profile_id || 'profile1') === activeProfile);
       data.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
       setFilters(data);
     } catch (e) { console.error(e); }
@@ -79,26 +58,6 @@ export default function SettingsPage() {
   return (
     <>
       <div className="page-header"><h1>Settings</h1><p>Manage project filter categories and Firebase settings</p></div>
-
-      <div className="card" style={{ marginBottom: '24px', backgroundColor: '#fff9f0', border: '1px solid var(--accent)' }}>
-        <h2 className="card-title" style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ width: '10px', height: '10px', backgroundColor: '#52c41a', borderRadius: '50%' }}></span>
-          Live Website Profile
-        </h2>
-        <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
-          Choose which profile is currently displayed on your public portfolio website.
-        </p>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', padding: '10px 16px', border: liveProfile === 'profile1' ? '2px solid var(--accent)' : '1px solid var(--border)', borderRadius: '8px', background: liveProfile === 'profile1' ? 'var(--orange-glow)' : 'white' }}>
-            <input type="radio" name="liveProfile" value="profile1" checked={liveProfile === 'profile1'} onChange={() => updateLiveProfile('profile1')} />
-            <span style={{ fontWeight: liveProfile === 'profile1' ? '600' : '400' }}>Profile 1 (Adhavan)</span>
-          </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', padding: '10px 16px', border: liveProfile === 'profile2' ? '2px solid var(--accent)' : '1px solid var(--border)', borderRadius: '8px', background: liveProfile === 'profile2' ? 'var(--orange-glow)' : 'white' }}>
-            <input type="radio" name="liveProfile" value="profile2" checked={liveProfile === 'profile2'} onChange={() => updateLiveProfile('profile2')} />
-            <span style={{ fontWeight: liveProfile === 'profile2' ? '600' : '400' }}>Profile 2 (Duraisingam)</span>
-          </label>
-        </div>
-      </div>
 
       <div className="card" style={{ marginBottom: '24px' }}>
         <h2 className="card-title" style={{ marginBottom: '20px' }}>Project Filter Categories</h2>
