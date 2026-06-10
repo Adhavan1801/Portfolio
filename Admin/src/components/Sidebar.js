@@ -66,10 +66,15 @@ export default function Sidebar() {
   const { logout } = useAuth();
   const { activeProfile, changeProfile } = useProfile();
   const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState(activeProfile || 'profile1');
 
   useEffect(() => {
     fetchSettings();
   }, []);
+
+  useEffect(() => {
+    if (activeProfile) setSelectedProfile(activeProfile);
+  }, [activeProfile]);
 
   async function fetchSettings() {
     try {
@@ -101,23 +106,32 @@ export default function Sidebar() {
 
       <div style={{ padding: '0 12px 16px', borderBottom: '1px solid var(--border)', marginBottom: '16px' }}>
         <select 
-          value={activeProfile} 
-          onChange={async (e) => {
-            const newProfile = e.target.value;
-            changeProfile(newProfile);
-            try {
-              await setDoc(doc(db, 'settings', 'global'), { published_profile_id: newProfile }, { merge: true });
-            } catch (err) {
-              console.error('Failed to set live profile:', err);
-            }
-            window.location.reload(); // Reload to refetch data for the new profile
-          }}
+          value={selectedProfile} 
+          onChange={(e) => setSelectedProfile(e.target.value)}
           className="form-select"
-          style={{ width: '100%', fontSize: '0.85rem', padding: '6px 10px', backgroundColor: 'var(--gray-50)', fontWeight: 600 }}
+          style={{ width: '100%', fontSize: '0.85rem', padding: '6px 10px', backgroundColor: 'var(--gray-50)', fontWeight: 600, marginBottom: selectedProfile !== activeProfile ? '8px' : '0' }}
         >
           <option value="profile1">Profile 1 (Adhavan)</option>
           <option value="profile2">Profile 2 (Duraisingam)</option>
         </select>
+        
+        {selectedProfile !== activeProfile && (
+          <button 
+            className="btn btn-primary"
+            style={{ width: '100%', padding: '6px', fontSize: '0.85rem' }}
+            onClick={async () => {
+              changeProfile(selectedProfile);
+              try {
+                await setDoc(doc(db, 'settings', 'global'), { published_profile_id: selectedProfile }, { merge: true });
+              } catch (err) {
+                console.error('Failed to set live profile:', err);
+              }
+              window.location.reload();
+            }}
+          >
+            Confirm Change
+          </button>
+        )}
       </div>
 
       <nav className="sidebar-nav">
