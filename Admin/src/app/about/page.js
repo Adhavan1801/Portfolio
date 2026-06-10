@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { db, storage } from '@/lib/firebase';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { uploadToCloudinary } from '@/lib/cloudinary';
+import { useProfile } from '@/context/ProfileContext';
 
 export default function AboutPage() {
   const [profile, setProfile] = useState(null);
@@ -14,17 +15,26 @@ export default function AboutPage() {
     resume_url: '', university: '', degree: '', graduation_year: 2028,
   });
   const [uploading, setUploading] = useState(false);
+  const { activeProfile } = useProfile();
 
-  useEffect(() => { fetchProfile(); }, []);
+  useEffect(() => { fetchProfile(); }, [activeProfile]);
 
   async function fetchProfile() {
     try {
-      const docRef = doc(db, 'profile', 'default');
+      const docRef = doc(db, 'profile', activeProfile);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const data = { id: docSnap.id, ...docSnap.data() };
         setProfile(data);
         setForm(data);
+      } else {
+        // Clear form if no profile exists for this ID yet
+        setProfile(null);
+        setForm({
+          name: '', title: '', tagline: '', about_text: '',
+          profile_image_url: '', about_image_url: '', email: '', github_url: '', linkedin_url: '',
+          resume_url: '', university: '', degree: '', graduation_year: 2028,
+        });
       }
     } catch (e) {
       console.error(e);
@@ -59,9 +69,9 @@ export default function AboutPage() {
 
     try {
       if (profile) {
-        await updateDoc(doc(db, 'profile', 'default'), payload);
+        await updateDoc(doc(db, 'profile', activeProfile), payload);
       } else {
-        await setDoc(doc(db, 'profile', 'default'), payload);
+        await setDoc(doc(db, 'profile', activeProfile), payload);
       }
       showToast('Profile saved!');
       fetchProfile();

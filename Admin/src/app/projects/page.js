@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { db, storage } from '@/lib/firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where } from 'firebase/firestore';
 import { uploadToCloudinary } from '@/lib/cloudinary';
+import { useProfile } from '@/context/ProfileContext';
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState([]);
@@ -11,6 +12,7 @@ export default function ProjectsPage() {
   const [editing, setEditing] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [toast, setToast] = useState(null);
+  const { activeProfile } = useProfile();
 
   const initialForm = {
     title: '', short_description: '', description: '',
@@ -28,9 +30,11 @@ export default function ProjectsPage() {
 
   async function fetchProjects() {
     try {
-      const q = query(collection(db, 'projects'), orderBy('display_order', 'asc'));
+      const q = query(collection(db, 'projects'), where('profile_id', '==', activeProfile));
       const snapshot = await getDocs(q);
-      setProjects(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      data.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+      setProjects(data);
     } catch (e) {
       console.error(e);
     }
@@ -38,9 +42,11 @@ export default function ProjectsPage() {
 
   async function fetchCategories() {
     try {
-      const q = query(collection(db, 'filter_categories'), orderBy('display_order', 'asc'));
+      const q = query(collection(db, 'filter_categories'), where('profile_id', '==', activeProfile));
       const snapshot = await getDocs(q);
-      setCategories(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      data.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+      setCategories(data);
     } catch (e) {
       console.error(e);
     }
@@ -97,7 +103,8 @@ export default function ProjectsPage() {
     const payload = {
       ...form,
       tech_stack: form.tech_stack.split(',').map(s => s.trim()).filter(Boolean),
-      display_order: parseInt(form.display_order) || 0
+      display_order: parseInt(form.display_order) || 0,
+      profile_id: activeProfile
     };
     delete payload.id; // ensure no id inside document
 
@@ -204,8 +211,8 @@ export default function ProjectsPage() {
 
       <div className="card">
         <h2 className="card-title" style={{ marginBottom: '20px' }}>All Projects</h2>
-        <div style={{ overflowX: 'auto' }}>
-          <table className="table">
+        <div className="table-container">
+          <table className="data-table">
             <thead>
               <tr>
                 <th>Order</th>

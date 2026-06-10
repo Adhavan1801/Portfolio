@@ -151,15 +151,17 @@ export default async function HomePage() {
         getSettings,
       } = await import('@/lib/firebase');
 
-      const [dbProfile, dbProjects, dbSkills, dbExperience, dbCerts, dbFilters, dbSettings] =
+      const dbSettings = await getSettings();
+      const liveProfile = dbSettings?.published_profile_id || 'profile1';
+
+      const [dbProfile, dbProjects, dbSkills, dbExperience, dbCerts, dbFilters] =
         await Promise.all([
-          getProfile(),
-          getProjects(),
-          getSkills(),
-          getExperience(),
-          getCertifications(),
-          getFilterCategories(),
-          getSettings(),
+          getProfile(liveProfile),
+          getProjects(liveProfile),
+          getSkills(liveProfile),
+          getExperience(liveProfile),
+          getCertifications(liveProfile),
+          getFilterCategories(liveProfile),
         ]);
 
       if (dbSettings?.maintenance_mode) {

@@ -1,5 +1,6 @@
 import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
+import { ProfileProvider } from '@/context/ProfileContext';
 import ProtectedLayout from '@/components/ProtectedLayout';
 
 export const metadata = {
@@ -12,9 +13,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <AuthProvider>
-          <ProtectedLayout>
-            {children}
-          </ProtectedLayout>
+          <ProfileProvider>
+            <ProtectedLayout>
+              {children}
+            </ProtectedLayout>
+          </ProfileProvider>
         </AuthProvider>
       </body>
     </html>

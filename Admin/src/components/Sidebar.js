@@ -59,10 +59,12 @@ const navItems = [
 ];
 
 import { useAuth } from '@/context/AuthContext';
+import { useProfile } from '@/context/ProfileContext';
 
 export default function Sidebar() {
   const pathname = usePathname();
   const { logout } = useAuth();
+  const { activeProfile, changeProfile } = useProfile();
   const [maintenanceMode, setMaintenanceMode] = useState(false);
 
   useEffect(() => {
@@ -92,9 +94,24 @@ export default function Sidebar() {
 
   return (
     <aside className="sidebar">
-      <div className="sidebar-logo">
+      <div className="sidebar-logo" style={{ marginBottom: '12px', borderBottom: 'none', paddingBottom: '0' }}>
         <span className="dot"></span>
         Admin
+      </div>
+
+      <div style={{ padding: '0 12px 16px', borderBottom: '1px solid var(--border)', marginBottom: '16px' }}>
+        <select 
+          value={activeProfile} 
+          onChange={(e) => {
+            changeProfile(e.target.value);
+            window.location.reload(); // Reload to refetch data for the new profile
+          }}
+          className="form-select"
+          style={{ width: '100%', fontSize: '0.85rem', padding: '6px 10px', backgroundColor: 'var(--gray-50)', fontWeight: 600 }}
+        >
+          <option value="profile1">Profile 1 (Adhavan)</option>
+          <option value="profile2">Profile 2 (Duraisingam)</option>
+        </select>
       </div>
 
       <nav className="sidebar-nav">

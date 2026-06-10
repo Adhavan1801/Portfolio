@@ -15,9 +15,9 @@ export const db = getFirestore(app);
 
 /* ── Helper fetchers ─────────────────────────────────────────────── */
 
-export async function getProfile() {
+export async function getProfile(profileId = 'profile1') {
   try {
-    const docRef = doc(db, 'profile', 'default');
+    const docRef = doc(db, 'profile', profileId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       return { id: docSnap.id, ...docSnap.data() };
@@ -29,73 +29,83 @@ export async function getProfile() {
   }
 }
 
-export async function getProjects() {
+export async function getProjects(profileId = 'profile1') {
   try {
     const q = query(
       collection(db, 'projects'),
       where('is_visible', '==', true),
-      orderBy('display_order', 'asc')
+      where('profile_id', '==', profileId)
     );
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    data.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+    return data;
   } catch (error) {
     console.error('Error fetching projects:', error);
     return [];
   }
 }
 
-export async function getSkills() {
+export async function getSkills(profileId = 'profile1') {
   try {
     const q = query(
       collection(db, 'skills'),
-      orderBy('display_order', 'asc')
+      where('profile_id', '==', profileId)
     );
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    data.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+    return data;
   } catch (error) {
     console.error('Error fetching skills:', error);
     return [];
   }
 }
 
-export async function getExperience() {
+export async function getExperience(profileId = 'profile1') {
   try {
     const q = query(
       collection(db, 'experience'),
       where('is_visible', '==', true),
-      orderBy('display_order', 'asc')
+      where('profile_id', '==', profileId)
     );
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    data.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+    return data;
   } catch (error) {
     console.error('Error fetching experience:', error);
     return [];
   }
 }
 
-export async function getCertifications() {
+export async function getCertifications(profileId = 'profile1') {
   try {
     const q = query(
       collection(db, 'certifications'),
       where('is_visible', '==', true),
-      orderBy('display_order', 'asc')
+      where('profile_id', '==', profileId)
     );
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    data.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+    return data;
   } catch (error) {
     console.error('Error fetching certifications:', error);
     return [];
   }
 }
 
-export async function getFilterCategories() {
+export async function getFilterCategories(profileId = 'profile1') {
   try {
     const q = query(
       collection(db, 'filter_categories'),
-      orderBy('display_order', 'asc')
+      where('profile_id', '==', profileId)
     );
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    data.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+    return data;
   } catch (error) {
     console.error('Error fetching filter categories:', error);
     return [];

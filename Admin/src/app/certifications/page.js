@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where } from 'firebase/firestore';
+import { useProfile } from '@/context/ProfileContext';
 import { uploadToCloudinary } from '@/lib/cloudinary';
 
 export default function CertificationsPage() {
@@ -10,17 +11,20 @@ export default function CertificationsPage() {
   const [editing, setEditing] = useState(null);
   const [toast, setToast] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const { activeProfile } = useProfile();
 
   const initialForm = { title: '', issuer: '', date: '', credential_url: '', is_visible: true, display_order: 0 };
   const [form, setForm] = useState(initialForm);
 
-  useEffect(() => { fetchCerts(); }, []);
+  useEffect(() => { fetchCerts(); }, [activeProfile]);
 
   async function fetchCerts() {
     try {
-      const q = query(collection(db, 'certifications'), orderBy('display_order', 'asc'));
+      const q = query(collection(db, 'certifications'), where('profile_id', '==', activeProfile));
       const snapshot = await getDocs(q);
-      setCerts(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      data.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+      setCerts(data);
     } catch (e) { console.error(e); }
   }
 
@@ -67,7 +71,7 @@ export default function CertificationsPage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const payload = { ...form, display_order: parseInt(form.display_order) || 0 };
+    const payload = { ...form, display_order: parseInt(form.display_order) || 0, profile_id: activeProfile };
     delete payload.id;
 
     try {
@@ -138,7 +142,8 @@ export default function CertificationsPage() {
 
       <div className="card">
         <h2 className="card-title" style={{ marginBottom: '20px' }}>Current Certifications</h2>
-        <table className="table">
+        <div className="table-container">
+          <table className="data-table">
           <thead>
             <tr><th>Order</th><th>Title</th><th>Issuer</th><th>Date</th><th>Visible</th><th>Actions</th></tr>
           </thead>
@@ -160,6 +165,7 @@ export default function CertificationsPage() {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
       {toast && <div className={`toast ${toast.type}`}>{toast.msg}</div>}
     </>

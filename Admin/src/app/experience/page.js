@@ -2,23 +2,27 @@
 
 import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where } from 'firebase/firestore';
+import { useProfile } from '@/context/ProfileContext';
 
 export default function ExperiencePage() {
   const [experience, setExperience] = useState([]);
   const [editing, setEditing] = useState(null);
   const [toast, setToast] = useState(null);
+  const { activeProfile } = useProfile();
 
   const initialForm = { role: '', company: '', location: '', start_date: '', end_date: '', description: '', is_visible: true, display_order: 0 };
   const [form, setForm] = useState(initialForm);
 
-  useEffect(() => { fetchExperience(); }, []);
+  useEffect(() => { fetchExperience(); }, [activeProfile]);
 
   async function fetchExperience() {
     try {
-      const q = query(collection(db, 'experience'), orderBy('display_order', 'asc'));
+      const q = query(collection(db, 'experience'), where('profile_id', '==', activeProfile));
       const snapshot = await getDocs(q);
-      setExperience(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      data.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+      setExperience(data);
     } catch (e) { console.error(e); }
   }
 
@@ -49,7 +53,7 @@ export default function ExperiencePage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const payload = { ...form, display_order: parseInt(form.display_order) || 0 };
+    const payload = { ...form, display_order: parseInt(form.display_order) || 0, profile_id: activeProfile };
     delete payload.id;
 
     try {
@@ -124,7 +128,8 @@ export default function ExperiencePage() {
 
       <div className="card">
         <h2 className="card-title" style={{ marginBottom: '20px' }}>Current Experience</h2>
-        <table className="table">
+        <div className="table-container">
+          <table className="data-table">
           <thead>
             <tr><th>Order</th><th>Role</th><th>Company</th><th>Dates</th><th>Visible</th><th>Actions</th></tr>
           </thead>
@@ -146,6 +151,7 @@ export default function ExperiencePage() {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
       {toast && <div className={`toast ${toast.type}`}>{toast.msg}</div>}
     </>
