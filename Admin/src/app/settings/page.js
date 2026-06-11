@@ -19,7 +19,6 @@ export default function SettingsPage() {
           <p>Firebase Storage Bucket: {process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ? '✅ Connected' : '❌ Not set'}</p>
         </div>
       </div>
-      {toast && <div className={`toast ${toast.type}`}>{toast.msg}</div>}
     </>
   );
 }
