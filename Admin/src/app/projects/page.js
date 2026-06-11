@@ -12,11 +12,12 @@ export default function ProjectsPage() {
   const [editing, setEditing] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [toast, setToast] = useState(null);
+  const [categoryForm, setCategoryForm] = useState({ name: '', slug: '', display_order: 0 });
   const { activeProfile } = useProfile();
 
   const initialForm = {
     title: '', short_description: '', description: '',
-    tech_stack: '', filter_category: '',
+    tech_stack: '', filter_categories: [],
     github_url: '', live_demo_url: '', image_url: '',
     show_github: true, show_live_demo: false, is_visible: true,
     display_order: 0
@@ -26,7 +27,7 @@ export default function ProjectsPage() {
   useEffect(() => {
     fetchProjects();
     fetchCategories();
-  }, []);
+  }, [activeProfile]);
 
   async function fetchProjects() {
     try {
@@ -79,6 +80,7 @@ export default function ProjectsPage() {
     setEditing(project.id);
     setForm({
       ...project,
+      filter_categories: project.filter_categories || (project.filter_category ? [project.filter_category] : []),
       tech_stack: Array.isArray(project.tech_stack) ? project.tech_stack.join(', ') : project.tech_stack || ''
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -100,6 +102,30 @@ export default function ProjectsPage() {
     }
   }
 
+  async function addCategory(e) {
+    e.preventDefault();
+    const payload = { ...categoryForm, display_order: parseInt(categoryForm.display_order) || 0, profile_id: activeProfile };
+    try {
+      await addDoc(collection(db, 'filter_categories'), payload);
+      showToast('Category added!');
+      setCategoryForm({ name: '', slug: '', display_order: 0 });
+      fetchCategories();
+    } catch (error) {
+      showToast('Error', 'error');
+    }
+  }
+
+  async function deleteCategory(id) {
+    if (!confirm('Delete this category?')) return;
+    try {
+      await deleteDoc(doc(db, 'filter_categories', id));
+      showToast('Deleted');
+      fetchCategories();
+    } catch (error) {
+      showToast('Error', 'error');
+    }
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     const payload = {
@@ -109,6 +135,7 @@ export default function ProjectsPage() {
       profile_id: activeProfile
     };
     delete payload.id; // ensure no id inside document
+    delete payload.filter_category; // clean up old single string format if present
 
     try {
       if (editing) {
@@ -141,12 +168,25 @@ export default function ProjectsPage() {
               <label className="form-label">Title *</label>
               <input required className="form-input" value={form.title} onChange={e => setForm({...form, title: e.target.value})} />
             </div>
-            <div className="form-group">
-              <label className="form-label">Category</label>
-              <select className="form-input" value={form.filter_category} onChange={e => setForm({...form, filter_category: e.target.value})}>
-                <option value="">None</option>
-                {categories.map(c => <option key={c.id} value={c.slug}>{c.name}</option>)}
-              </select>
+            <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+              <label className="form-label">Categories</label>
+              <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', padding: '10px', backgroundColor: 'var(--bg)', border: '1px solid var(--border)', borderRadius: '4px' }}>
+                {categories.map(c => (
+                  <label key={c.id} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.9rem', cursor: 'pointer' }}>
+                    <input 
+                      type="checkbox" 
+                      checked={form.filter_categories.includes(c.slug)}
+                      onChange={(e) => {
+                        const newCats = e.target.checked 
+                          ? [...form.filter_categories, c.slug]
+                          : form.filter_categories.filter(slug => slug !== c.slug);
+                        setForm({...form, filter_categories: newCats});
+                      }}
+                    />
+                    {c.name}
+                  </label>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -246,6 +286,48 @@ export default function ProjectsPage() {
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div className="card" style={{ marginTop: '40px' }}>
+        <h2 className="card-title" style={{ marginBottom: '20px' }}>Project Filter Categories</h2>
+        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px' }}>
+          These categories appear as filter buttons in the Projects section. The slug should match the category slugs assigned to your projects.
+        </p>
+        <form onSubmit={addCategory} style={{ display: 'flex', gap: '12px', alignItems: 'flex-end', flexWrap: 'wrap', marginBottom: '20px' }}>
+          <div className="form-group" style={{ marginBottom: 0, flex: 1, minWidth: '150px' }}>
+            <label className="form-label">Name</label>
+            <input className="form-input" value={categoryForm.name} onChange={(e) => setCategoryForm({ ...categoryForm, name: e.target.value })} placeholder="Computer Vision" required />
+          </div>
+          <div className="form-group" style={{ marginBottom: 0, flex: 1, minWidth: '150px' }}>
+            <label className="form-label">Slug</label>
+            <input className="form-input" value={categoryForm.slug} onChange={(e) => setCategoryForm({ ...categoryForm, slug: e.target.value })} placeholder="computer-vision" required />
+          </div>
+          <div className="form-group" style={{ marginBottom: 0, width: '80px' }}>
+            <label className="form-label">Order</label>
+            <input className="form-input" type="number" value={categoryForm.display_order} onChange={(e) => setCategoryForm({ ...categoryForm, display_order: e.target.value })} />
+          </div>
+          <button type="submit" className="btn btn-primary" style={{ height: '40px' }}>Add</button>
+        </form>
+
+        {categories.length === 0 ? (
+          <div className="empty-state"><div className="icon">🏷️</div><p>No filter categories yet.</p></div>
+        ) : (
+          <div className="table-container">
+            <table className="data-table">
+              <thead><tr><th>Order</th><th>Name</th><th>Slug</th><th>Actions</th></tr></thead>
+              <tbody>
+                {categories.map((c) => (
+                  <tr key={c.id}>
+                    <td>{c.display_order}</td>
+                    <td style={{ fontWeight: 600 }}>{c.name}</td>
+                    <td style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem' }}>{c.slug}</td>
+                    <td><button className="btn btn-sm btn-danger" onClick={() => deleteCategory(c.id)}>Delete</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {toast && <div className={`toast ${toast.type}`}>{toast.msg}</div>}

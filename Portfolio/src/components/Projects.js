@@ -13,7 +13,7 @@ export default function Projects({ projects, filterCategories }) {
       title: 'GhostMTFormer: Dual-Encoder Skin Lesion Segmentation',
       short_description: 'Dual-encoder (GhostNet + dilated CNN) with multi-scale CFCA cross-attention, XFF bottleneck, BRM boundary refinement, and MC-Dropout for clinically explainable segmentation.',
       tech_stack: ['PyTorch', 'GhostNet', 'Cross-Attention', 'Grad-CAM'],
-      filter_category: 'computer-vision',
+      filter_categories: ['computer-vision'],
       github_url: 'https://github.com/DuraiSingam',
       live_demo_url: '',
       show_github: true,
@@ -25,7 +25,7 @@ export default function Projects({ projects, filterCategories }) {
       title: 'GPS-Guided Autonomous Robot for Air Quality Monitoring',
       short_description: 'ESP32 robot with MQ-series sensors and NEO-6M GPS streaming georeferenced data to a FastAPI + LightGBM AQI classifier visualised on a Leaflet.js heatmap.',
       tech_stack: ['ESP32', 'FastAPI', 'LightGBM', 'Leaflet.js'],
-      filter_category: 'embedded-ai',
+      filter_categories: ['embedded-ai'],
       github_url: 'https://github.com/DuraiSingam',
       live_demo_url: '',
       show_github: true,
@@ -37,7 +37,7 @@ export default function Projects({ projects, filterCategories }) {
       title: 'Blood Donation Prediction using Decision Tree',
       short_description: 'RFMTC transfusion dataset pipeline — IQR outlier removal, SMOTE oversampling, and GridSearchCV-tuned CART Decision Tree with stratified k-fold cross-validation.',
       tech_stack: ['Python', 'Scikit-Learn', 'SMOTE', 'GridSearchCV'],
-      filter_category: 'ml-data-science',
+      filter_categories: ['ml-data-science'],
       github_url: 'https://github.com/DuraiSingam',
       live_demo_url: '',
       show_github: true,
@@ -49,7 +49,7 @@ export default function Projects({ projects, filterCategories }) {
       title: 'Attention-Based Deep RL for Adaptive TCP Congestion Control',
       short_description: 'GRU-DDQN and Attention-DDQN models for TCP congestion control on a simulated 100 Mbps network. Achieved 0.15% packet loss and 27.7% latency reduction.',
       tech_stack: ['PyTorch', 'GRU', 'DDQN', 'Reinforcement Learning'],
-      filter_category: 'ml-data-science',
+      filter_categories: ['ml-data-science'],
       github_url: 'https://github.com/DuraiSingam',
       live_demo_url: '',
       show_github: true,
@@ -61,7 +61,7 @@ export default function Projects({ projects, filterCategories }) {
       title: 'Multi-Task Continual Learning for Satellite Monitoring',
       short_description: '3D-CNN/TCN continual learning framework with EWC and MMD alignment for remote sensing tasks. Deployed on Jetson Orin Nano at sub-66ms latency.',
       tech_stack: ['PyTorch', '3D-CNN', 'TCN', 'EWC', 'Jetson Orin'],
-      filter_category: 'computer-vision',
+      filter_categories: ['computer-vision'],
       github_url: 'https://github.com/DuraiSingam',
       live_demo_url: '',
       show_github: true,
@@ -85,7 +85,12 @@ export default function Projects({ projects, filterCategories }) {
   const filtered =
     activeFilter === 'all'
       ? displayProjects
-      : displayProjects.filter((p) => p.filter_category === activeFilter);
+      : displayProjects.filter((p) => {
+          if (p.filter_categories && Array.isArray(p.filter_categories)) {
+            return p.filter_categories.includes(activeFilter);
+          }
+          return p.filter_category === activeFilter;
+        });
 
   return (
     <section id="projects" className="section">
