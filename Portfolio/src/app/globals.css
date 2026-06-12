@@ -1263,7 +1263,7 @@ p {
 
 .project-detail-demo-frame iframe {
   width: 100%;
-  height: 600px;
+  height: 1050px;
   border: none;
   display: block;
   background: var(--white-pure);
@@ -1315,7 +1315,7 @@ p {
   }
 
   .project-detail-demo-frame iframe {
-    height: 400px;
+    height: 1250px;
   }
 }
 
