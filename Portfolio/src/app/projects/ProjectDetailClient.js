@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import ScrollReveal from '@/components/ScrollReveal';
 
@@ -8,6 +8,7 @@ export default function ProjectDetailClient({ projects, filterCategories }) {
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedProject, setSelectedProject] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
+  const detailPanelRef = useRef(null);
 
   const displayCategories = filterCategories && filterCategories.length > 0
     ? [{ id: 'all', name: 'All', slug: 'all' }, ...filterCategories]
@@ -28,6 +29,10 @@ export default function ProjectDetailClient({ projects, filterCategories }) {
     setTimeout(() => {
       setSelectedProject(project);
       setIsAnimating(false);
+      // Scroll detail panel back to top
+      if (detailPanelRef.current) {
+        detailPanelRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }, 200);
   }
 
@@ -134,7 +139,7 @@ export default function ProjectDetailClient({ projects, filterCategories }) {
         </aside>
 
         {/* ── Right: Project Detail Panel ── */}
-        <main className={`project-detail-panel ${isAnimating ? 'fading' : ''}`}>
+        <main ref={detailPanelRef} className={`project-detail-panel ${isAnimating ? 'fading' : ''}`}>
           {!selectedProject ? (
             <div className="project-detail-empty">
               <span style={{ fontSize: '3rem' }}>👆</span>
