@@ -871,9 +871,9 @@ p {
 }
 
 .projects-detail-header {
-  max-width: var(--max-width);
+  max-width: 1440px;
   margin: 0 auto;
-  padding: calc(var(--nav-height) + var(--space-2xl)) var(--space-xl) var(--space-2xl);
+  padding: calc(var(--nav-height) + var(--space-2xl)) var(--space-lg) var(--space-2xl);
 }
 
 .back-link {
@@ -920,11 +920,11 @@ p {
 
 .projects-detail-layout {
   display: grid;
-  grid-template-columns: 360px 1fr;
+  grid-template-columns: 340px 1fr;
   gap: 0;
-  max-width: var(--max-width);
+  max-width: 1440px;
   margin: 0 auto var(--space-5xl);
-  padding: 0 var(--space-xl);
+  padding: 0 var(--space-lg);
   align-items: start;
 }
 

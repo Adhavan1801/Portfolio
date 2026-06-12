@@ -93,6 +93,9 @@ export default function Projects({ projects, filterCategories }) {
           return p.filter_category === activeFilter;
         });
 
+  // Show only 4 on the homepage
+  const visibleProjects = filtered.slice(0, 4);
+
   return (
     <section id="projects" className="section">
       <ScrollReveal>
@@ -122,7 +125,7 @@ export default function Projects({ projects, filterCategories }) {
       </ScrollReveal>
 
       <div className="projects-grid">
-        {filtered.map((project, index) => (
+        {visibleProjects.map((project, index) => (
           <ScrollReveal key={project.id || index} delay={index * 100}>
             <div className="project-card">
               <div className="project-card-image">
@@ -167,7 +170,7 @@ export default function Projects({ projects, filterCategories }) {
             className="btn-secondary"
             style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 28px', borderRadius: 'var(--radius-md)', fontWeight: 600, fontSize: '0.9rem', border: '1px solid var(--border)', color: 'var(--text-primary)', transition: 'all var(--transition-fast)', textDecoration: 'none' }}
           >
-            View All Projects
+            View All Projects ({displayProjects.length})
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '16px', height: '16px' }}>
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
