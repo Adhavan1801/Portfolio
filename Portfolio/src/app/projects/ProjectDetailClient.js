@@ -244,10 +244,6 @@ export default function ProjectDetailClient({ projects, filterCategories }) {
                       Live Demo
                     </h3>
                   </div>
-                  <a href={selectedProject.live_demo_url} target="_blank" rel="noopener noreferrer" className="project-detail-link-btn primary live-demo-btn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
-                    Launch Live Demo
-                  </a>
                   <div className="project-detail-demo-frame">
                     <div className="demo-frame-bar">
                       <span /><span /><span />
@@ -260,6 +256,10 @@ export default function ProjectDetailClient({ projects, filterCategories }) {
                       allow="fullscreen"
                     />
                   </div>
+                  <a href={selectedProject.live_demo_url} target="_blank" rel="noopener noreferrer" className="project-detail-link-btn outline" style={{ marginTop: '12px', display: 'inline-flex' }}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                    View in Full Screen
+                  </a>
                 </div>
               )}
             </>
