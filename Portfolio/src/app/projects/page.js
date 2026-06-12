@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import ProjectDetailClient from './ProjectDetailClient';
 
 export const revalidate = 60;
@@ -58,5 +59,9 @@ export default async function ProjectsPage() {
     console.error('Firebase fetch failed, using fallback data:', err);
   }
 
-  return <ProjectDetailClient projects={projects} filterCategories={filterCategories} />;
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh' }} />}>
+      <ProjectDetailClient projects={projects} filterCategories={filterCategories} />
+    </Suspense>
+  );
 }

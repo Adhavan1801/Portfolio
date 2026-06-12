@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import ScrollReveal from '@/components/ScrollReveal';
 
@@ -9,6 +10,8 @@ export default function ProjectDetailClient({ projects, filterCategories }) {
   const [selectedProject, setSelectedProject] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const detailPanelRef = useRef(null);
+  const searchParams = useSearchParams();
+  const targetId = searchParams.get('id');
 
   const displayCategories = filterCategories && filterCategories.length > 0
     ? [{ id: 'all', name: 'All', slug: 'all' }, ...filterCategories]
@@ -45,10 +48,17 @@ export default function ProjectDetailClient({ projects, filterCategories }) {
     }
   }, [activeFilter]);
 
+  // Auto-select: prefer ?id= param, otherwise first project
   useEffect(() => {
-    if (projects.length > 0 && !selectedProject) {
-      setSelectedProject(projects[0]);
+    if (projects.length === 0) return;
+    if (targetId) {
+      const match = projects.find(p => p.id === targetId);
+      if (match) {
+        setSelectedProject(match);
+        return;
+      }
     }
+    if (!selectedProject) setSelectedProject(projects[0]);
   }, [projects]);
 
   const techStack = selectedProject
