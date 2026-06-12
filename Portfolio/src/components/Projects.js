@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import ScrollReveal from './ScrollReveal';
 
 export default function Projects({ projects, filterCategories }) {
@@ -158,6 +159,21 @@ export default function Projects({ projects, filterCategories }) {
           </ScrollReveal>
         ))}
       </div>
+
+      <ScrollReveal delay={200}>
+        <div style={{ textAlign: 'center', marginTop: 'var(--space-3xl)' }}>
+          <Link
+            href="/projects"
+            className="btn-secondary"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 28px', borderRadius: 'var(--radius-md)', fontWeight: 600, fontSize: '0.9rem', border: '1px solid var(--border)', color: 'var(--text-primary)', transition: 'all var(--transition-fast)', textDecoration: 'none' }}
+          >
+            View All Projects
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '16px', height: '16px' }}>
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </Link>
+        </div>
+      </ScrollReveal>
     </section>
   );
 }
