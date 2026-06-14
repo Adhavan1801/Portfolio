@@ -145,8 +145,8 @@ export default function CustomCursor() {
     }
 
     function loop() {
-      cx += (tx - cx) * 0.25;
-      cy += (ty - cy) * 0.25;
+      cx += (tx - cx) * 0.16;
+      cy += (ty - cy) * 0.16;
       main.style.transform = `translate(${cx}px, ${cy}px)`;
       raf = requestAnimationFrame(loop);
     }
