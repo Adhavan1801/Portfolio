@@ -53,7 +53,8 @@ export default function Navbar() {
   const scrollTo = (id) => {
     const el = document.getElementById(id);
     if (!el) return;
-    const top = el.getBoundingClientRect().top + window.scrollY - 80;
+    const offset = id === 'about' ? 0 : 80;
+    const top = el.getBoundingClientRect().top + window.scrollY - offset;
     if (window.__lenis) {
       window.__lenis.scrollTo(top, { duration: 1.2 });
     } else {
