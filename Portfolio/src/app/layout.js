@@ -1,7 +1,6 @@
 import './globals.css';
 import SmoothScroll from '@/components/SmoothScroll';
 import Navbar from '@/components/Navbar';
-import CustomCursor from '@/components/CustomCursor';
 
 export const metadata = {
   title: 'Durai Singam | AI & Data Science Portfolio',
@@ -46,8 +45,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body style={{ cursor: 'none' }}>
-        <CustomCursor />
+      <body>
         <SmoothScroll>
           <Navbar />
           <main id="main-content" style={{ position: 'relative', zIndex: 1 }}>
