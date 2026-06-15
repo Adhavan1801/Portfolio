@@ -1803,3 +1803,15 @@ p {
   color: var(--text-secondary);
   line-height: 1.7;
 }
+
+.markdown-body img {
+  max-width: 100%;
+  height: auto;
+  max-height: 500px;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  margin: 2rem auto;
+  display: block;
+  cursor: auto !important;
+  border: 1px solid var(--border-light);
+}
