@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 
 const mainSections = [
   { id: 'home',     label: 'Home'     },
@@ -19,6 +20,8 @@ export default function Navbar() {
   const [othersOpen,    setOthersOpen]    = useState(false);
   const navRef    = useRef(null);
   const closeTimer = useRef(null);
+  const router = useRouter();
+  const pathname = usePathname();
 
   // ── Scroll tracking ────────────────────────────────────────────────
   useEffect(() => {
@@ -58,6 +61,29 @@ export default function Navbar() {
     }
   };
 
+  const handleNavClick = (id) => {
+    if (id === 'projects') {
+      router.push('/projects');
+      return;
+    }
+    if (id === 'home') {
+      if (pathname === '/') {
+        if (window.__lenis) window.__lenis.scrollTo(0, { duration: 1.2 });
+        else window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        router.push('/');
+      }
+      return;
+    }
+    
+    // For about, experience, certifications
+    if (pathname !== '/') {
+      router.push('/#' + id);
+    } else {
+      scrollTo(id);
+    }
+  };
+
   // ── Dropdown hover helpers (with small delay to prevent flicker) ───
   const openDropdown  = () => { clearTimeout(closeTimer.current); setOthersOpen(true);  };
   const closeDropdown = () => { closeTimer.current = setTimeout(() => setOthersOpen(false), 120); };
@@ -70,7 +96,7 @@ export default function Navbar() {
         <button
           key={id}
           className={`nav-link ${activeSection === id ? 'active' : ''}`}
-          onClick={() => scrollTo(id)}
+          onClick={() => handleNavClick(id)}
           aria-current={activeSection === id ? 'page' : undefined}
         >
           {label}
@@ -117,7 +143,7 @@ export default function Navbar() {
                 key={id}
                 className="nav-dropdown-item"
                 role="option"
-                onClick={() => { scrollTo(id); setOthersOpen(false); }}
+                onClick={() => { handleNavClick(id); setOthersOpen(false); }}
               >
                 {label}
               </button>
