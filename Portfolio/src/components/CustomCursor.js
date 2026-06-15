@@ -40,11 +40,11 @@ function getEffectiveBg(el) {
 
 function getMode(el) {
   if (!el) return 'normal';
-  // Image detection — walk up
+  // Image or iframe detection — walk up
   let node = el;
   while (node && node.tagName) {
     const tag = node.tagName.toLowerCase();
-    if (tag === 'img' || tag === 'video' || tag === 'picture') return 'image';
+    if (tag === 'iframe' || tag === 'img' || tag === 'video' || tag === 'picture') return 'hidden';
     node = node.parentElement;
   }
   // Orange text
@@ -86,7 +86,7 @@ export default function CustomCursor() {
       const size = isInteractive ? 32 : 22;
       const half = size / 2;
 
-      if (m === 'image') {
+      if (m === 'image' || m === 'hidden') {
         main.style.opacity = '0';
         return;
       }
@@ -137,7 +137,7 @@ export default function CustomCursor() {
     }
     function onLeaveInteractive() {
       isInteractive = false;
-      const size = curMode === 'image' ? 0 : 22;
+      const size = (curMode === 'image' || curMode === 'hidden') ? 0 : 22;
       main.style.width      = size + 'px';
       main.style.height     = size + 'px';
       main.style.marginLeft = -(size / 2) + 'px';
