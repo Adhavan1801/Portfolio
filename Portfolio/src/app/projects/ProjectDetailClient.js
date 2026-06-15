@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import ScrollReveal from '@/components/ScrollReveal';
+import ReactMarkdown from 'react-markdown';
 
 export default function ProjectDetailClient({ projects, filterCategories }) {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -194,10 +195,8 @@ export default function ProjectDetailClient({ projects, filterCategories }) {
                     <span className="section-dot" />
                     About This Project
                   </h3>
-                  <div className="project-detail-description">
-                    {selectedProject.description.split('\n').map((line, i) => (
-                      line.trim() ? <p key={i}>{line}</p> : <br key={i} />
-                    ))}
+                  <div className="project-detail-description markdown-body">
+                    <ReactMarkdown>{selectedProject.description}</ReactMarkdown>
                   </div>
                 </div>
               )}
