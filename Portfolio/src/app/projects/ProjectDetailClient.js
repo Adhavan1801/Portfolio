@@ -196,7 +196,24 @@ export default function ProjectDetailClient({ projects, filterCategories }) {
                     About This Project
                   </h3>
                   <div className="project-detail-description markdown-body">
-                    <ReactMarkdown>{selectedProject.description}</ReactMarkdown>
+                    <ReactMarkdown
+                      components={{
+                        img: ({node, ...props}) => {
+                          let alignClass = 'markdown-img-center';
+                          let altText = props.alt || '';
+                          if (altText.endsWith('#left')) {
+                            alignClass = 'markdown-img-left';
+                            altText = altText.replace('#left', '').trim();
+                          } else if (altText.endsWith('#right')) {
+                            alignClass = 'markdown-img-right';
+                            altText = altText.replace('#right', '').trim();
+                          }
+                          return <img {...props} alt={altText} className={alignClass} />;
+                        }
+                      }}
+                    >
+                      {selectedProject.description}
+                    </ReactMarkdown>
                   </div>
                 </div>
               )}
