@@ -102,7 +102,7 @@ export default function Projects({ projects, filterCategories }) {
         <span className="section-label">Portfolio</span>
       </ScrollReveal>
       <ScrollReveal delay={50}>
-        <h2 className="section-title">Featured Projects</h2>
+        <h2 className="section-title">Featured Projects ({displayProjects.length})</h2>
       </ScrollReveal>
       <ScrollReveal delay={100}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: 'var(--space-xl)' }}>
