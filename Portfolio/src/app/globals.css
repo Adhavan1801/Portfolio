@@ -810,22 +810,25 @@ p {
 
 .skill-category {
   padding: var(--space-xl);
-  background: var(--accent);
+  background: var(--white-pure);
   border-radius: var(--radius-lg);
-  border: 1px solid var(--accent-hover);
+  border: 1px solid var(--border-light);
+  border-top: 4px solid var(--accent);
+  box-shadow: var(--shadow-sm);
   transition: all var(--transition-base);
 }
 
 .skill-category:hover {
-  border-color: var(--orange-dark);
-  box-shadow: 0 8px 30px rgba(221, 107, 59, 0.4);
+  border-color: var(--border);
+  border-top-color: var(--orange-dark);
+  box-shadow: var(--shadow-md);
   transform: translateY(-4px);
 }
 
 .skill-category-title {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--white-pure);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
   margin-bottom: var(--space-md);
   display: flex;
   align-items: center;
@@ -837,7 +840,7 @@ p {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--white-pure);
+  background: var(--accent);
   flex-shrink: 0;
 }
 
@@ -852,7 +855,7 @@ p {
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--accent);
-  background: var(--white-pure);
+  background: var(--orange-glow);
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
@@ -860,8 +863,8 @@ p {
 
 .skill-tag:hover {
   color: var(--white-pure);
-  border-color: var(--white-pure);
-  background: transparent;
+  border-color: var(--accent);
+  background: var(--accent);
 }
 
 /* ── Projects Detail Page (/projects) ───────────────────────────── */
