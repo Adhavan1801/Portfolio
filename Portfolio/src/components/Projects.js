@@ -102,7 +102,7 @@ export default function Projects({ projects, filterCategories }) {
         <span className="section-label">Portfolio</span>
       </ScrollReveal>
       <ScrollReveal delay={50}>
-        <h2 className="section-title">Featured Projects ({displayProjects.length})</h2>
+        <h2 className="section-title">Featured Projects <span className="projects-count-badge">{displayProjects.length}</span></h2>
       </ScrollReveal>
       <ScrollReveal delay={100}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: 'var(--space-xl)' }}>
@@ -112,7 +112,7 @@ export default function Projects({ projects, filterCategories }) {
           <Link
             href="/projects"
             className="btn-secondary"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 24px', borderRadius: 'var(--radius-full)', fontWeight: 600, fontSize: '0.85rem', border: '1px solid var(--border)', color: 'var(--text-primary)', transition: 'all var(--transition-fast)', textDecoration: 'none', whiteSpace: 'nowrap' }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 24px', borderRadius: 'var(--radius-full)', fontWeight: 600, fontSize: '0.85rem', border: '1.5px solid #000000', color: '#000000', transition: 'all var(--transition-fast)', textDecoration: 'none', whiteSpace: 'nowrap' }}
           >
             View All Projects
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '16px', height: '16px' }}>
