@@ -810,9 +810,9 @@ p {
 
 .skill-category {
   padding: var(--space-xl);
-  background: var(--bg-secondary);
+  background: #000000;
   border-radius: var(--radius-lg);
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--gray-800);
   transition: all var(--transition-base);
 }
 
@@ -825,7 +825,7 @@ p {
 .skill-category-title {
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--white-pure);
   margin-bottom: var(--space-md);
   display: flex;
   align-items: center;
@@ -851,17 +851,17 @@ p {
   padding: 5px 12px;
   font-size: 0.8rem;
   font-weight: 500;
-  color: var(--text-secondary);
-  background: var(--white-pure);
-  border: 1px solid var(--border);
+  color: var(--gray-300);
+  background: var(--black-soft);
+  border: 1px solid var(--gray-800);
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
 }
 
 .skill-tag:hover {
-  color: var(--accent);
+  color: var(--white-pure);
   border-color: var(--accent);
-  background: var(--orange-glow);
+  background: var(--accent);
 }
 
 /* ── Projects Detail Page (/projects) ───────────────────────────── */
