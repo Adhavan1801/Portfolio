@@ -105,9 +105,21 @@ export default function Projects({ projects, filterCategories }) {
         <h2 className="section-title">Featured Projects</h2>
       </ScrollReveal>
       <ScrollReveal delay={100}>
-        <p className="section-subtitle">
-          A selection of projects showcasing my work in AI, computer vision, embedded systems, and more.
-        </p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: 'var(--space-xl)' }}>
+          <p className="section-subtitle" style={{ margin: 0, maxWidth: '600px' }}>
+            A selection of projects showcasing my work in AI, computer vision, embedded systems, and more.
+          </p>
+          <Link
+            href="/projects"
+            className="btn-secondary"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 24px', borderRadius: 'var(--radius-full)', fontWeight: 600, fontSize: '0.85rem', border: '1px solid var(--border)', color: 'var(--text-primary)', transition: 'all var(--transition-fast)', textDecoration: 'none', whiteSpace: 'nowrap' }}
+          >
+            View All Projects
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '16px', height: '16px' }}>
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </Link>
+        </div>
       </ScrollReveal>
 
       <ScrollReveal delay={150}>
@@ -162,20 +174,7 @@ export default function Projects({ projects, filterCategories }) {
         ))}
       </div>
 
-      <ScrollReveal delay={200}>
-        <div style={{ textAlign: 'center', marginTop: 'var(--space-3xl)' }}>
-          <Link
-            href="/projects"
-            className="btn-secondary"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 28px', borderRadius: 'var(--radius-md)', fontWeight: 600, fontSize: '0.9rem', border: '1px solid var(--border)', color: 'var(--text-primary)', transition: 'all var(--transition-fast)', textDecoration: 'none' }}
-          >
-            View All Projects ({displayProjects.length})
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '16px', height: '16px' }}>
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </Link>
-        </div>
-      </ScrollReveal>
+
     </section>
   );
 }

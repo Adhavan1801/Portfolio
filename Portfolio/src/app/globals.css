@@ -916,7 +916,7 @@ p {
   align-items: center;
   justify-content: center;
   font-family: var(--font-mono);
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: var(--accent);
   background: var(--orange-glow);
