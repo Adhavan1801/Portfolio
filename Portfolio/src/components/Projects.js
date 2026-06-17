@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import ScrollReveal from './ScrollReveal';
+import TechIcon from './TechIcon';
 
 export default function Projects({ projects, filterCategories }) {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -156,7 +157,10 @@ export default function Projects({ projects, filterCategories }) {
                   <p className="project-card-desc">{project.short_description || project.description}</p>
                   <div className="project-card-tech">
                     {(project.tech_stack || []).map((tech, i) => (
-                      <span key={i} className="tech-tag">{tech}</span>
+                      <span key={i} className="tech-tag">
+                        <TechIcon tech={tech} />
+                        {tech}
+                      </span>
                     ))}
                   </div>
                   <div className="project-card-links">

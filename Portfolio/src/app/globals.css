@@ -1441,13 +1441,22 @@ p {
 }
 
 .tech-tag {
-  padding: 3px 10px;
-  font-size: 0.72rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  font-size: 0.75rem;
   font-weight: 600;
   font-family: var(--font-mono);
   color: var(--accent);
   background: var(--orange-glow);
   border-radius: var(--radius-full);
+}
+
+.tech-icon {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
 }
 
 .project-card-links {

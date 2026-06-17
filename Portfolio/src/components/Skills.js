@@ -1,6 +1,7 @@
 'use client';
 
 import ScrollReveal from './ScrollReveal';
+import TechIcon from './TechIcon';
 
 export default function Skills({ skills }) {
   // Fallback data if Supabase isn't connected yet
@@ -35,7 +36,8 @@ export default function Skills({ skills }) {
               <h3 className="skill-category-title">{category.category}</h3>
               <div className="skill-tags">
                 {(category.items || []).map((skill, i) => (
-                  <span key={i} className="skill-tag">
+                  <span key={i} className="skill-tag" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                    <TechIcon tech={skill} />
                     {skill}
                   </span>
                 ))}

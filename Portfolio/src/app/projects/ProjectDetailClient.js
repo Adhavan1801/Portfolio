@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import ScrollReveal from '@/components/ScrollReveal';
 import ReactMarkdown from 'react-markdown';
+import TechIcon from '@/components/TechIcon';
 
 export default function ProjectDetailClient({ projects, filterCategories }) {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -227,7 +228,10 @@ export default function ProjectDetailClient({ projects, filterCategories }) {
                   </h3>
                   <div className="project-card-tech" style={{ marginTop: '0.75rem' }}>
                     {techStack.map((tech, i) => (
-                      <span key={i} className="tech-tag">{tech}</span>
+                      <span key={i} className="tech-tag">
+                        <TechIcon tech={tech} />
+                        {tech}
+                      </span>
                     ))}
                   </div>
                 </div>
