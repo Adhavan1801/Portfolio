@@ -810,15 +810,15 @@ p {
 
 .skill-category {
   padding: var(--space-xl);
-  background: #000000;
+  background: var(--accent);
   border-radius: var(--radius-lg);
-  border: 1px solid var(--gray-800);
+  border: 1px solid var(--accent-hover);
   transition: all var(--transition-base);
 }
 
 .skill-category:hover {
-  border-color: var(--orange-glow-strong);
-  box-shadow: 0 4px 20px var(--orange-glow);
+  border-color: var(--orange-dark);
+  box-shadow: 0 8px 30px rgba(221, 107, 59, 0.4);
   transform: translateY(-4px);
 }
 
@@ -837,7 +837,7 @@ p {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--white-pure);
   flex-shrink: 0;
 }
 
@@ -850,18 +850,18 @@ p {
 .skill-tag {
   padding: 5px 12px;
   font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--gray-300);
-  background: var(--black-soft);
-  border: 1px solid var(--gray-800);
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--white-pure);
+  border: 1px solid transparent;
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
 }
 
 .skill-tag:hover {
   color: var(--white-pure);
-  border-color: var(--accent);
-  background: var(--accent);
+  border-color: var(--white-pure);
+  background: transparent;
 }
 
 /* ── Projects Detail Page (/projects) ───────────────────────────── */
