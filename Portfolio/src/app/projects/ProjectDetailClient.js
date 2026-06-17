@@ -86,7 +86,7 @@ export default function ProjectDetailClient({ projects, filterCategories }) {
         </ScrollReveal>
         <ScrollReveal delay={50}>
           <span className="section-label">Portfolio</span>
-          <h1 className="projects-detail-title">All Projects</h1>
+          <h1 className="projects-detail-title">All Projects <span className="projects-count-badge">{projects.length}</span></h1>
           <p className="projects-detail-subtitle">
             A full collection of my work in AI, computer vision, embedded systems, and more.
           </p>
