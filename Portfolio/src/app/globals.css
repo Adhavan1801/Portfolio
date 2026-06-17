@@ -813,7 +813,6 @@ p {
   background: var(--white-pure);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-light);
-  border-top: 4px solid var(--accent);
   box-shadow: var(--shadow-sm);
   transition: all var(--transition-base);
 }
