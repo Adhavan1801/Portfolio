@@ -33,7 +33,7 @@ export default function InteractiveGridBackground() {
     let horizonY = -150;
 
     let time = 0;
-    const speed = 0.4; // restored to original speed
+    const speed = 0.5; // restored to original speed
 
     function resize() {
       const rect = container.getBoundingClientRect();
