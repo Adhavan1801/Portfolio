@@ -328,16 +328,16 @@ p {
   left: 50%;
   transform: translateX(-50%) translateY(80px);
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--gray-800);
   border-radius: var(--radius-full);
   padding: 6px 8px;
   display: flex;
   align-items: center;
   gap: 4px;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -353,7 +353,7 @@ p {
   padding: 8px 18px;
   font-size: 0.85rem;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: var(--gray-400);
   border-radius: var(--radius-full);
   transition: all var(--transition-fast);
   white-space: nowrap;
@@ -361,13 +361,13 @@ p {
 }
 
 .nav-link:hover {
-  color: var(--text-primary);
-  background: var(--gray-100);
+  color: var(--white-pure);
+  background: var(--black-lighter);
 }
 
 .nav-link.active {
   color: var(--white-pure);
-  background: var(--black);
+  background: var(--accent);
 }
 
 .nav-cta {
@@ -413,12 +413,12 @@ p {
   top: calc(100% + 10px);
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(10, 10, 10, 0.95);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--gray-800);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.15);
   padding: 6px;
   display: flex;
   flex-direction: column;
@@ -443,7 +443,7 @@ p {
   padding: 10px 14px;
   font-size: 0.84rem;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: var(--gray-400);
   border-radius: 10px;
   text-align: left;
   transition: all 0.15s ease;
@@ -451,8 +451,8 @@ p {
 }
 
 .nav-dropdown-item:hover {
-  background: var(--gray-100);
-  color: var(--text-primary);
+  background: var(--black-lighter);
+  color: var(--white-pure);
   padding-left: 18px;
 }
 
