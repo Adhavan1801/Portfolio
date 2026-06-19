@@ -3,36 +3,35 @@ import SmoothScroll from '@/components/SmoothScroll';
 import Navbar from '@/components/Navbar';
 
 export const metadata = {
-  title: 'Durai Singam | AI & Data Science Portfolio',
+  title: "Adhav's Portfolio",
   description:
-    'AI and Data Science undergraduate at Thoothukudi clg of engineering specialising in end-to-end ML pipeline engineering — from model architecture and training to edge deployment. Computer vision, NLP, Gen AI, embedded AI, and agentic AI workflows.',
+    'AI and Data Science undergraduate specialising in end-to-end ML pipeline engineering — from model architecture and training to edge deployment. Computer vision, NLP, Gen AI, embedded AI, and agentic AI workflows.',
   keywords: [
-    'Durai Singam',
+    'Adhav',
     'AI',
     'Data Science',
     'Machine Learning',
     'Computer Vision',
     'Portfolio',
-    'Thoothukudi clg of engineering',
     'PyTorch',
     'Deep Learning',
     'Edge AI',
     'NLP',
   ],
-  authors: [{ name: 'Durai Singam' }],
-  creator: 'Durai Singam',
+  authors: [{ name: 'Adhav' }],
+  creator: 'Adhav',
   openGraph: {
-    title: 'Durai Singam | AI & Data Science Portfolio',
+    title: "Adhav's Portfolio",
     description:
       'AI & DS undergraduate building intelligent systems from architecture to edge deployment.',
-    url: 'https://duraisingam-portfolio.vercel.app',
-    siteName: 'Durai Singam Portfolio',
+    url: 'https://adhav.manager.vercel.app',
+    siteName: "Adhav's Portfolio",
     locale: 'en_US',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Durai Singam | AI & Data Science Portfolio',
+    title: "Adhav's Portfolio",
     description:
       'AI & DS undergraduate building intelligent systems from architecture to edge deployment.',
   },
