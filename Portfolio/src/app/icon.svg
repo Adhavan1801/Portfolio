@@ -1,0 +1,18 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#dd6b3b" />
+      <stop offset="100%" stop-color="#ff9a76" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <!-- Stylized A Chevron -->
+  <path d="M50 15 L15 85 H35 L50 50 L65 85 H85 Z" fill="url(#grad)" filter="url(#glow)"/>
+  
+  <!-- Data Node / Crossbar replacement -->
+  <circle cx="50" cy="70" r="10" fill="#FFFFFF" filter="url(#glow)"/>
+</svg>
