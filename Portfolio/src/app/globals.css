@@ -1620,6 +1620,15 @@ p {
 }
 
 /* ── Contact / Footer ────────────────────────────────────────────── */
+.contact-section,
+.contact-section *,
+.navbar,
+.navbar *,
+.nav-dropdown,
+.nav-dropdown * {
+  cursor: url('/cursor-white.svg') 2 2, auto !important;
+}
+
 .contact-section {
   background: var(--black);
   color: var(--white);
