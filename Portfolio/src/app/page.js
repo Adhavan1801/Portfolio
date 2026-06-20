@@ -186,11 +186,40 @@ export default async function HomePage() {
         <Hero profile={profile} />
       </div>
       <div className="scroll-over-hero">
-        <About profile={profile} />
-        <Skills skills={skills} />
-        <Projects projects={projects} filterCategories={filterCategories} />
-        <Experience experience={experience} />
-        <Certifications certifications={certifications} />
+        {/* About — warm peach mesh */}
+        <div className="section-wrapper section-about">
+          <About profile={profile} />
+        </div>
+
+
+
+        {/* Skills — cool gray with dot grid */}
+        <div className="section-wrapper section-skills">
+          <Skills skills={skills} />
+        </div>
+
+
+
+        {/* Projects — warm blush with diagonal lines */}
+        <div className="section-wrapper section-projects">
+          <Projects projects={projects} filterCategories={filterCategories} />
+        </div>
+
+
+
+        {/* Experience — warm neutral with grid */}
+        <div className="section-wrapper section-experience">
+          <Experience experience={experience} />
+        </div>
+
+
+
+        {/* Certifications — warm sand with dots */}
+        <div className="section-wrapper section-certifications">
+          <Certifications certifications={certifications} />
+        </div>
+
+        {/* Contact — dark footer (no wrapper needed) */}
         <Contact profile={profile} />
       </div>
     </>
