@@ -127,7 +127,7 @@ body {
 .scroll-over-hero {
   position: relative;
   z-index: 10;
-  background-color: #FFFFFF;
+  background-color: #FFF9F3;
   border-radius: 24px 24px 0 0;
   box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.10);
 }
@@ -259,7 +259,7 @@ p {
 
 /* ── Global Noise Overlay ── */
 body {
-  background-color: #FFFFFF !important;
+  background-color: #FFF9F3 !important;
 }
 
 .scroll-over-hero::after {
@@ -805,7 +805,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 60%, #FFFFFF 100%);
+  background: linear-gradient(180deg, transparent 60%, #FFF9F3 100%);
   pointer-events: none;
 }
 
