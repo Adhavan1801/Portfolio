@@ -798,13 +798,6 @@ body {
   object-position: top center;
 }
 
-.about-image-wrapper::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 60%, #FFE8D6 100%);
-  pointer-events: none;
-}
 
 .about-decoration {
   position: absolute;
